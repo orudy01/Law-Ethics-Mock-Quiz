@@ -519,18 +519,33 @@ let bChoice = document.getElementById("questionB");
 let cChoice = document.getElementById("questionC");
 let dChoice = document.getElementById("questionD");
 
+let choices = document.querySelectorAll("input[name=quizChoice]");
+
 let aBox = document.querySelector(".aAnswer");
 let bBox = document.querySelector(".bAnswer");
 let cBox = document.querySelector(".cAnswer");
 let dBox = document.querySelector(".dAnswer");
+
+let choiceContainer = document.querySelector(".choices-container");
+let button = document.getElementById("submit");
 
 const totalQuestions = 50;
 let currentDataNum = 0;
 let totalCorrect = 0;
 let userAnswer = undefined;
 let questionAnswer = undefined;
+let answerBox = undefined;
+let firstTry = true;
 
 function loadQuiz() {
+    //unclick options
+    choices.forEach(choice => {
+        if (choice.checked === true) {
+            choice.checked = false;
+        }
+    })
+
+    //load proper data
     let data = quizData[currentDataNum];
 
     questionNum.innerText = "Question " + (currentDataNum + 1);
@@ -543,7 +558,12 @@ function loadQuiz() {
 
     questionAnswer = data.answer;
 
+    //increment
     currentDataNum++;
+}
+function loadMasterQuiz() {
+    loadQuiz();
+    showAnswer();
 }
 
 function submit() {
@@ -556,28 +576,24 @@ function submit() {
 
         //check if quiz has more questions
         if (currentDataNum != totalQuestions) {
-            let nextQuestion = setTimeout(loadQuiz, 1500)
+            let nextQuestion = setTimeout(loadQuiz, 1200)
             userAnswer = undefined;
         }
         //no more questions in quiz
         else {
-            let end = setTimeout(endQuiz, 1500);
+            let end = setTimeout(endQuiz, 1200);
         }
     }
 
 }
 
 function getChoice() {
-    let choices = document.querySelectorAll("input[name=quizChoice]");
-
     choices.forEach(choice => {
         if (choice.checked === true) {
             userAnswer = choice.id;
-            choice.checked = false;
         }
     })
 }
-
 
 
 function checkAnswer() {
@@ -588,19 +604,19 @@ function checkAnswer() {
         switch (userAnswer) {
             case 'a':
                 aBox.classList.add('green-glow');
-                setTimeout(function () { aBox.classList.remove('green-glow') }, 1500)
+                setTimeout(function () { aBox.classList.remove('green-glow') }, 1200)
                 break;
             case 'b':
                 bBox.classList.add('green-glow');
-                setTimeout(function () { bBox.classList.remove('green-glow') }, 1500)
+                setTimeout(function () { bBox.classList.remove('green-glow') }, 1200)
                 break;
             case 'c':
                 cBox.classList.add('green-glow');
-                setTimeout(function () { cBox.classList.remove('green-glow') }, 1500)
+                setTimeout(function () { cBox.classList.remove('green-glow') }, 1200)
                 break;
             case 'd':
                 dBox.classList.add('green-glow');
-                setTimeout(function () { dBox.classList.remove('green-glow') }, 1500)
+                setTimeout(function () { dBox.classList.remove('green-glow') }, 1200)
                 break;
         }
     }
@@ -608,37 +624,37 @@ function checkAnswer() {
         switch (userAnswer) {
             case 'a':
                 aBox.classList.add('red-glow');
-                setTimeout(function () { aBox.classList.remove('red-glow') }, 1500)
+                setTimeout(function () { aBox.classList.remove('red-glow') }, 1200)
                 break;
             case 'b':
                 bBox.classList.add('red-glow');
-                setTimeout(function () { bBox.classList.remove('red-glow') }, 1500)
+                setTimeout(function () { bBox.classList.remove('red-glow') }, 1200)
                 break;
             case 'c':
                 cBox.classList.add('red-glow');
-                setTimeout(function () { cBox.classList.remove('red-glow') }, 1500)
+                setTimeout(function () { cBox.classList.remove('red-glow') }, 1200)
                 break;
             case 'd':
                 dBox.classList.add('red-glow');
-                setTimeout(function () { dBox.classList.remove('red-glow') }, 1500)
+                setTimeout(function () { dBox.classList.remove('red-glow') }, 1200)
                 break;
         }
         switch (questionAnswer) {
             case 'a':
                 aBox.classList.add('green-glow');
-                setTimeout(function () { aBox.classList.remove('green-glow') }, 1500)
+                setTimeout(function () { aBox.classList.remove('green-glow') }, 1200)
                 break;
             case 'b':
                 bBox.classList.add('green-glow');
-                setTimeout(function () { bBox.classList.remove('green-glow') }, 1500)
+                setTimeout(function () { bBox.classList.remove('green-glow') }, 1200)
                 break;
             case 'c':
                 cBox.classList.add('green-glow');
-                setTimeout(function () { cBox.classList.remove('green-glow') }, 1500)
+                setTimeout(function () { cBox.classList.remove('green-glow') }, 1200)
                 break;
             case 'd':
                 dBox.classList.add('green-glow');
-                setTimeout(function () { dBox.classList.remove('green-glow') }, 1500)
+                setTimeout(function () { dBox.classList.remove('green-glow') }, 1200)
                 break;
         }
 
@@ -646,21 +662,65 @@ function checkAnswer() {
 }
 
 function endQuiz() {
-    console.log(totalCorrect);
-    let choiceContainer = document.querySelector(".choices-container");
-    let button = document.getElementById("submit");
     questionNum.innerText = "Quiz completed!";
-    questionText.innerText = `Final score is ${totalCorrect}/${totalQuestions}`
-    choiceContainer.remove();
+    choiceContainer.style.display = "none";
     button.removeAttribute("onclick");
-    button.setAttribute("onclick", "restartQuiz()");
-    button.innerText = "Retake Quiz";
+    button.setAttribute("onclick", "reviewQuiz()");
+    button.innerText = "Review Quiz with Answers";
+    if(firstTry === false){
+        questionText.innerText = `Original final score was ${totalCorrect}/${totalQuestions}`
+        button.innerText="Retake Quiz";
+        button.removeAttribute("onclick");
+        button.setAttribute("onclick", "restartQuiz()");
+    }
+    else{
+        questionText.innerText = `Final score is ${totalCorrect}/${totalQuestions}`
+    }
+}
 
+
+function showAnswer() {
+    switch (questionAnswer) {
+        case 'a':
+            answerBox = aBox;
+            break;
+        case 'b':
+            answerBox = bBox;
+            break;
+        case 'c':
+            answerBox = cBox;
+            break;
+        case 'd':
+            answerBox = dBox;
+            break;
+    }
+    answerBox.classList.add('green-glow');
+}
+
+function nextAnswer() {
+    answerBox.classList.remove("green-glow");
+    if (currentDataNum != totalQuestions) {
+        loadMasterQuiz();
+    }
+    else{
+        firstTry = false;
+        endQuiz();
+    }
+}
+
+function reviewQuiz() {
+    currentDataNum = 0;
+    choiceContainer.style.display = "block";
+    button.innerText = "Next"
+    button.removeAttribute("onclick");
+    button.setAttribute("onclick", "nextAnswer()");
+    loadMasterQuiz();
 }
 
 function restartQuiz() {
     window.location.reload();
 }
+
 
 
 loadQuiz();
