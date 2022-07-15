@@ -511,6 +511,12 @@ const quizDataB = [
     },
 ]
 
+let menu = document.getElementById("menu-screen")
+let quizScren = document.getElementById("quiz-screen");
+let shortQuiz = document.getElementById("snack");
+let longQuiz = document.getElementById("full");
+
+
 let questionNum = document.getElementById("qNum");
 let questionText = document.getElementById("qText");
 
@@ -529,13 +535,37 @@ let dBox = document.querySelector(".dAnswer");
 let choiceContainer = document.querySelector(".choices-container");
 let button = document.getElementById("submit");
 
-const totalQuestions = 50;
+let totalQuestions = 0;
 let currentDataNum = 0;
 let totalCorrect = 0;
 let userAnswer = undefined;
 let questionAnswer = undefined;
 let answerBox = undefined;
 let firstTry = true;
+
+//randomize quiz data order
+console.log(quizData[0]);
+const randQuiz = quizData.sort(() => Math.random() - 0.5);
+console.log(quizData[0]);
+
+function loadFullQuiz() {
+    totalQuestions = 50;
+}
+
+function loadShortQuiz() {
+    totalQuestions = 10;
+}
+
+function prepQuiz() {
+    if (totalQuestions != 0) {
+        menu.style.display = "none";
+        quizScren.style.display = "block";
+        loadQuiz();
+        button.innerText = "Submit!"
+        button.removeAttribute("onclick");
+        button.setAttribute("onclick", "submit()");
+    }
+}
 
 function loadQuiz() {
     //unclick options
@@ -561,6 +591,7 @@ function loadQuiz() {
     //increment
     currentDataNum++;
 }
+
 function loadMasterQuiz() {
     loadQuiz();
     showAnswer();
@@ -595,9 +626,7 @@ function getChoice() {
     })
 }
 
-
 function checkAnswer() {
-
     //correct case
     if (userAnswer == questionAnswer) {
         totalCorrect++;
@@ -667,17 +696,18 @@ function endQuiz() {
     button.removeAttribute("onclick");
     button.setAttribute("onclick", "reviewQuiz()");
     button.innerText = "Review Quiz with Answers";
-    if(firstTry === false){
+    if (firstTry === false) {
         questionText.innerText = `Original final score was ${totalCorrect}/${totalQuestions}`
-        button.innerText="Retake Quiz";
+        button.innerText = "Main Menu";
         button.removeAttribute("onclick");
         button.setAttribute("onclick", "restartQuiz()");
+        let topButton = document.querySelector(".top-buttons");
+        topButton.style.display ="none";
     }
-    else{
+    else {
         questionText.innerText = `Final score is ${totalCorrect}/${totalQuestions}`
     }
 }
-
 
 function showAnswer() {
     switch (questionAnswer) {
@@ -702,7 +732,7 @@ function nextAnswer() {
     if (currentDataNum != totalQuestions) {
         loadMasterQuiz();
     }
-    else{
+    else {
         firstTry = false;
         endQuiz();
     }
@@ -723,4 +753,5 @@ function restartQuiz() {
 
 
 
-loadQuiz();
+//loadMenu();
+//loadQuiz();

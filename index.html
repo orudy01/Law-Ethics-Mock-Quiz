@@ -15,8 +15,8 @@
 <body>
     <div class="content-container">
         <div class="quiz-container">
-            <div class="quiz-top">
-                <button hidden class="top-buttons">Home</button>
+            <div id="quiz-screen" style="display: none;" class="quiz-top">
+                <button class="top-buttons" onclick="restartQuiz()">Home</button>
                 <div class="quiz-question">
                     <h2 id="qNum">Sample </h2>
                     <p id="qText">Sample</p>
@@ -40,7 +40,25 @@
                     </div>
                 </div>
             </div>
-            <button id="submit" onclick="submit()">Submit!</button>
+            <div id="menu-screen" class="menu">
+                <div class="menu-title">
+                    <h1>Law and Ethics Practice Quiz</h1>
+                    <p>Select your prefered study method:</p>
+                </div>
+                <div class="qChoices">
+                    <button id="snack" class="quiz-option" onclick="loadShortQuiz()">
+                        <h2>Quick Bite</h2>
+                        <div class="emoji">🍣</div>
+                        <p>10 randomly selected questions</p>
+                    </button>
+                    <button id="full" class="quiz-option" onclick="loadFullQuiz();">
+                        <h2>Full course meal</h2>
+                        <div class="emoji">🍱</div>
+                        <p>All 50 questions in random order</p>
+                    </button>
+                </div>
+            </div>
+            <button id="submit" onclick="prepQuiz()">Select Quiz!</button>
         </div>
     </div>
     <div class="footer">
