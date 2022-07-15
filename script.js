@@ -550,10 +550,12 @@ console.log(quizData[0]);
 
 function loadFullQuiz() {
     totalQuestions = 50;
+    button.innerText = "Select full course meal!"
 }
 
 function loadShortQuiz() {
     totalQuestions = 10;
+    button.innerText = "Select quick bite!"
 }
 
 function prepQuiz() {
